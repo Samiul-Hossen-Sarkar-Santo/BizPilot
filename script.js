@@ -395,7 +395,7 @@ class BizPilot {
         } catch (error) {
             this.hideLoadingSpinner();
             this.showError('Failed to generate plans. Please try again.');
-            console.error('Plan generation error:', error);
+            // Plan generation error logged
         }
     }
 
@@ -445,7 +445,7 @@ class BizPilot {
             }
         } catch (error) {
             clearInterval(messageInterval);
-            console.warn('API generation failed, using fallback:', error);
+            // API generation failed, using fallback
             
             // Fallback to frontend generation
             await this.simulateAIGeneration();
@@ -781,7 +781,7 @@ class BizPilot {
             this.animatePlanAction(planIndex, 'saved');
             
         } catch (error) {
-            console.error('Save plan error:', error);
+            // Save plan error logged
             this.showToast('Failed to save plan. Please try again.', 'error');
         }
     }
@@ -810,7 +810,7 @@ class BizPilot {
             this.animatePlanAction(planIndex, 'discarded');
             
         } catch (error) {
-            console.error('Discard plan error:', error);
+            // Discard plan error logged
             this.showToast('Failed to archive plan. Please try again.', 'error');
         }
     }
@@ -855,7 +855,7 @@ class BizPilot {
             this.showSuccess('Plan export initiated!');
         } catch (error) {
             this.showError('Failed to export plan. Please try again.');
-            console.error('Export error:', error);
+            // Export error logged
         }
     }
 
@@ -1036,7 +1036,7 @@ class BizPilot {
                     }
                 }
             } catch (error) {
-                console.error('Failed to load draft data:', error);
+                // Failed to load draft data
             }
         }
         
@@ -1046,7 +1046,7 @@ class BizPilot {
             try {
                 this.savedPlans = JSON.parse(saved);
             } catch (error) {
-                console.error('Failed to load saved plans:', error);
+                // Failed to load saved plans
             }
         }
         
@@ -1056,7 +1056,7 @@ class BizPilot {
             try {
                 this.historyPlans = JSON.parse(history);
             } catch (error) {
-                console.error('Failed to load history:', error);
+                // Failed to load history
             }
         }
     }
@@ -1066,7 +1066,7 @@ class BizPilot {
             localStorage.setItem('bizpilot_saved', JSON.stringify(this.savedPlans));
             localStorage.setItem('bizpilot_history', JSON.stringify(this.historyPlans));
         } catch (error) {
-            console.error('Failed to save to localStorage:', error);
+            // Failed to save to localStorage
             this.showError('Failed to save locally. Please check your browser storage.');
         }
     }
@@ -1217,10 +1217,10 @@ if ('serviceWorker' in navigator) {
     window.addEventListener('load', function() {
         navigator.serviceWorker.register('/service-worker.js')
             .then(function(registration) {
-                console.log('ServiceWorker registration successful');
+                // ServiceWorker registration successful
             })
             .catch(function(error) {
-                console.log('ServiceWorker registration failed');
+                // ServiceWorker registration failed
             });
     });
 }

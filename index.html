@@ -1,17 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">    <link href="styles.css?v=1.0.2" rel="stylesheet" />
-    <link rel="manifest" href="manifest.json" />
-
-    <!-- PWA Meta Tags -->
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-    <meta name="apple-mobile-web-app-title" content="BizPilot" />
-    <meta name="msapplication-TileColor" content="#2563eb" />
-    <meta name="theme-color" content="#2563eb" />
-  </head>
-<body>
-    <!-- Navigation -->  <meta charset="UTF-8" />
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>BizPilot - AI Business Idea Generator</title>
     <meta
@@ -42,7 +32,7 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
-    <link href="styles.css?v=1.0.1" rel="stylesheet" />
+    <link href="styles.css?v=1.0.3" rel="stylesheet" />
     <link rel="manifest" href="manifest.json" />
 
     <!-- PWA Meta Tags -->
@@ -434,10 +424,10 @@
           navigator.serviceWorker
             .register("service-worker.js")
             .then(function (registration) {
-              console.log("ServiceWorker registration successful");
+              // ServiceWorker registration successful
             })
             .catch(function (error) {
-              console.log("ServiceWorker registration failed");
+              // ServiceWorker registration failed
             });
         });
       }

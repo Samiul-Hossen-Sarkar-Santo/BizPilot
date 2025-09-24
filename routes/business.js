@@ -77,13 +77,9 @@ router.post('/ideas/demo', validateBusinessIdea, async (req, res) => {
             }
         };
 
-        console.log('🎬 Demo business idea received:', { title, category, budget });
-
         try {
             // Generate AI business plans
             const plans = await generateBusinessPlans(businessIdea);
-            
-            console.log('✅ Plans generated successfully:', plans.length, 'plans');
 
             res.status(201).json({
                 success: true,

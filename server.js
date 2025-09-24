@@ -85,6 +85,13 @@ app.use(express.static(path.join(__dirname, '.')));
 
 // Serve frontend for all non-API routes
 app.get('*', (req, res) => {
+    // Don't serve HTML for API routes
+    if (req.path.startsWith('/api/')) {
+        return res.status(404).json({ 
+            success: false, 
+            message: 'API endpoint not found' 
+        });
+    }
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
