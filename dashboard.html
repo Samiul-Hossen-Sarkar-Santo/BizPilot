@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - BizPilot</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="dashboard-body">
+    <!-- Dashboard Navigation -->
+    <nav class="dashboard-nav">
+        <div class="nav-brand">
+            <i class="fas fa-rocket"></i>
+            <span>BizPilot</span>
+        </div>
+        <div class="nav-user">
+            <div class="user-info">
+                <span>Welcome, Entrepreneur!</span>
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard Sidebar -->
+    <aside class="dashboard-sidebar">
+        <div class="sidebar-menu">
+            <a href="#" class="menu-item active">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="#" class="menu-item">
+                <i class="fas fa-lightbulb"></i>
+                <span>New Idea</span>
+            </a>
+            <a href="#" class="menu-item">
+                <i class="fas fa-chart-bar"></i>
+                <span>My Ideas</span>
+            </a>
+            <a href="#" class="menu-item">
+                <i class="fas fa-users"></i>
+                <span>Community</span>
+            </a>
+            <a href="#" class="menu-item">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </a>
+        </div>
+        <div class="sidebar-footer">
+            <div class="plan-info">
+                <h4>Free Plan</h4>
+                <p>2/3 ideas used this month</p>
+                <button class="btn-primary btn-small">Upgrade</button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Dashboard Main Content -->
+    <main class="dashboard-main">
+        <div class="dashboard-header">
+            <h1>Your Business Journey</h1>
+            <p>Transform your ideas into successful businesses with AI-powered insights</p>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-lightbulb"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>3</h3>
+                    <p>Ideas Created</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>85%</h3>
+                    <p>Avg Success Score</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>12</h3>
+                    <p>Days Active</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Gold</h3>
+                    <p>Achievement Level</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Ideas -->
+        <div class="dashboard-section">
+            <div class="section-header">
+                <h2>Recent Ideas</h2>
+                <button class="btn-primary" onclick="createNewIdea()">
+                    <i class="fas fa-plus"></i>
+                    New Idea
+                </button>
+            </div>
+            <div class="ideas-grid">
+                <div class="idea-card">
+                    <div class="idea-header">
+                        <h3>Eco-Friendly Shoe Brand</h3>
+                        <span class="idea-status success">Validated</span>
+                    </div>
+                    <p class="idea-description">Sustainable footwear targeting young professionals in Dhaka</p>
+                    <div class="idea-metrics">
+                        <div class="metric">
+                            <span class="metric-label">Market Score</span>
+                            <span class="metric-value">92%</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Revenue Potential</span>
+                            <span class="metric-value">$250K</span>
+                        </div>
+                    </div>
+                    <div class="idea-actions">
+                        <button class="btn-secondary btn-small">View Details</button>
+                        <button class="btn-primary btn-small">Continue</button>
+                    </div>
+                </div>
+
+                <div class="idea-card">
+                    <div class="idea-header">
+                        <h3>Food Delivery Platform</h3>
+                        <span class="idea-status pending">In Progress</span>
+                    </div>
+                    <p class="idea-description">Local food delivery service with sustainable packaging</p>
+                    <div class="idea-metrics">
+                        <div class="metric">
+                            <span class="metric-label">Market Score</span>
+                            <span class="metric-value">78%</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Revenue Potential</span>
+                            <span class="metric-value">$450K</span>
+                        </div>
+                    </div>
+                    <div class="idea-actions">
+                        <button class="btn-secondary btn-small">View Details</button>
+                        <button class="btn-primary btn-small">Continue</button>
+                    </div>
+                </div>
+
+                <div class="idea-card">
+                    <div class="idea-header">
+                        <h3>EdTech Learning App</h3>
+                        <span class="idea-status draft">Draft</span>
+                    </div>
+                    <p class="idea-description">Mobile learning platform for skill development</p>
+                    <div class="idea-metrics">
+                        <div class="metric">
+                            <span class="metric-label">Market Score</span>
+                            <span class="metric-value">--</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Revenue Potential</span>
+                            <span class="metric-value">--</span>
+                        </div>
+                    </div>
+                    <div class="idea-actions">
+                        <button class="btn-secondary btn-small">Edit</button>
+                        <button class="btn-primary btn-small">Analyze</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Insights -->
+        <div class="dashboard-section">
+            <div class="section-header">
+                <h2>AI Insights</h2>
+            </div>
+            <div class="insights-grid">
+                <div class="insight-card">
+                    <div class="insight-icon">
+                        <i class="fas fa-trending-up"></i>
+                    </div>
+                    <div class="insight-content">
+                        <h4>Market Opportunity</h4>
+                        <p>Sustainable products are trending 23% higher this quarter. Perfect timing for your eco-friendly shoe brand!</p>
+                    </div>
+                </div>
+                <div class="insight-card">
+                    <div class="insight-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="insight-content">
+                        <h4>Community Trend</h4>
+                        <p>5 entrepreneurs in your area are working on similar sustainable fashion ideas. Consider collaboration opportunities.</p>
+                    </div>
+                </div>
+                <div class="insight-card">
+                    <div class="insight-icon">
+                        <i class="fas fa-calendar"></i>
+                    </div>
+                    <div class="insight-content">
+                        <h4>Next Steps</h4>
+                        <p>Complete your market research by Friday to stay on track for your Q2 launch timeline.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="dashboard-section">
+            <div class="section-header">
+                <h2>Quick Actions</h2>
+            </div>
+            <div class="actions-grid">
+                <div class="action-card" onclick="createNewIdea()">
+                    <i class="fas fa-lightbulb"></i>
+                    <h4>New Business Idea</h4>
+                    <p>Start validating a new concept</p>
+                </div>
+                <div class="action-card">
+                    <i class="fas fa-chart-line"></i>
+                    <h4>Market Analysis</h4>
+                    <p>Deep dive into market trends</p>
+                </div>
+                <div class="action-card">
+                    <i class="fas fa-handshake"></i>
+                    <h4>Find Partners</h4>
+                    <p>Connect with complementary skills</p>
+                </div>
+                <div class="action-card">
+                    <i class="fas fa-graduation-cap"></i>
+                    <h4>Learning Resources</h4>
+                    <p>Enhance your business skills</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- New Idea Modal -->
+    <div class="modal" id="newIdeaModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Create New Business Idea</h2>
+                <button class="modal-close" onclick="closeNewIdeaModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form class="idea-form" onsubmit="submitNewIdea(event)">
+                    <div class="form-group">
+                        <label>Business Idea Title</label>
+                        <input type="text" placeholder="e.g., Eco-friendly delivery service" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea rows="4" placeholder="Describe your business idea in detail..." required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Industry Category</label>
+                        <select required>
+                            <option value="">Select category</option>
+                            <option value="technology">Technology</option>
+                            <option value="retail">Retail & E-commerce</option>
+                            <option value="food">Food & Beverage</option>
+                            <option value="health">Health & Wellness</option>
+                            <option value="education">Education</option>
+                            <option value="finance">Finance</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Target Location</label>
+                        <input type="text" placeholder="e.g., Dhaka, Bangladesh" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Initial Budget Range</label>
+                        <select required>
+                            <option value="">Select budget</option>
+                            <option value="0-1000">$0 - $1,000</option>
+                            <option value="1000-5000">$1,000 - $5,000</option>
+                            <option value="5000-10000">$5,000 - $10,000</option>
+                            <option value="10000-50000">$10,000 - $50,000</option>
+                            <option value="50000+">$50,000+</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" onclick="closeNewIdeaModal()">Cancel</button>
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-magic"></i>
+                            Generate Analysis
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

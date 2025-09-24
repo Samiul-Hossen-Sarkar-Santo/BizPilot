@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BizPilot - AI Assistant for Small Business</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-rocket"></i>
+                <span>BizPilot</span>
+            </div>
+            <div class="nav-menu">
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#pricing" class="nav-link">Pricing</a>
+                <a href="#about" class="nav-link">About</a>
+            </div>
+            <div class="nav-auth">
+                <button class="btn-secondary" onclick="showAuthModal('login')">Login</button>
+                <button class="btn-primary" onclick="showAuthModal('signup')">Get Started</button>
+            </div>
+            <div class="nav-toggle" onclick="toggleMobileMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    Transform Your <span class="gradient-text">Business Ideas</span> 
+                    Into Reality with AI
+                </h1>
+                <p class="hero-subtitle">
+                    BizPilot leverages advanced AI to validate, strategize, launch, and scale your business. 
+                    Get comprehensive startup models in under a minute with interactive simulations.
+                </p>
+                <div class="hero-cta">
+                    <button class="btn-primary btn-large" onclick="showAuthModal('signup')">
+                        <i class="fas fa-rocket"></i>
+                        Start Your Journey
+                    </button>
+                    <button class="btn-secondary btn-large" onclick="scrollToDemo()">
+                        <i class="fas fa-play"></i>
+                        Watch Demo
+                    </button>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <span class="stat-number">10k+</span>
+                        <span class="stat-label">Ideas Validated</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">95%</span>
+                        <span class="stat-label">Success Rate</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">< 1min</span>
+                        <span class="stat-label">Model Generation</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-demo">
+                <div class="demo-widget">
+                    <div class="demo-header">
+                        <h3>Try AI Demo</h3>
+                        <div class="demo-modes">
+                            <button class="mode-btn active" data-mode="text" onclick="switchDemoMode('text')">
+                                <i class="fas fa-keyboard"></i>
+                            </button>
+                            <button class="mode-btn" data-mode="voice" onclick="switchDemoMode('voice')">
+                                <i class="fas fa-microphone"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="demo-input" id="textDemo">
+                        <textarea 
+                            placeholder="Describe your business idea... (e.g., eco-friendly shoe brand in Dhaka)"
+                            id="ideaInput"
+                            rows="4"
+                        ></textarea>
+                        <button class="demo-submit" onclick="generateDemo()">
+                            <i class="fas fa-magic"></i>
+                            Generate Model
+                        </button>
+                    </div>
+                    <div class="demo-input" id="voiceDemo" style="display: none;">
+                        <div class="voice-input">
+                            <button class="voice-btn" id="voiceBtn" onclick="toggleVoiceInput()">
+                                <i class="fas fa-microphone"></i>
+                                <span>Click to speak</span>
+                            </button>
+                            <div class="voice-status" id="voiceStatus">Ready to listen...</div>
+                        </div>
+                    </div>
+                    <div class="demo-output" id="demoOutput">
+                        <div class="demo-placeholder">
+                            <i class="fas fa-lightbulb"></i>
+                            <p>Enter your idea above to see AI-powered insights</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-header">
+                <h2>Powerful Features for Every Entrepreneur</h2>
+                <p>Everything you need to turn your ideas into successful businesses</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>AI-Powered Validation</h3>
+                    <p>Get instant market analysis and feasibility reports powered by advanced AI algorithms.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Interactive Simulations</h3>
+                    <p>Visualize your business model with dynamic charts and what-if scenario planning.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-microphone"></i>
+                    </div>
+                    <h3>Multi-Modal Input</h3>
+                    <p>Describe your ideas through text, voice, or upload documents and images.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h3>Rapid Prototyping</h3>
+                    <p>Generate 2-3 comprehensive business models in under a minute.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Community Driven</h3>
+                    <p>Access templates and collaborate with other entrepreneurs in your region.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Secure & Private</h3>
+                    <p>Your ideas are protected with enterprise-grade encryption and privacy controls.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="pricing" id="pricing">
+        <div class="container">
+            <div class="section-header">
+                <h2>Choose Your Plan</h2>
+                <p>Start free, upgrade as you grow</p>
+            </div>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <h3>Free</h3>
+                        <div class="price">$0<span>/month</span></div>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i> 2 models per idea</li>
+                        <li><i class="fas fa-check"></i> 3-month forecasts</li>
+                        <li><i class="fas fa-check"></i> 50 AI messages/month</li>
+                        <li><i class="fas fa-check"></i> Core features</li>
+                    </ul>
+                    <button class="btn-secondary btn-full" onclick="showAuthModal('signup')">Get Started</button>
+                </div>
+                <div class="pricing-card featured">
+                    <div class="pricing-badge">Most Popular</div>
+                    <div class="pricing-header">
+                        <h3>Pro</h3>
+                        <div class="price">$9.99<span>/month</span></div>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i> Unlimited models</li>
+                        <li><i class="fas fa-check"></i> 24-month forecasts</li>
+                        <li><i class="fas fa-check"></i> Unlimited AI messages</li>
+                        <li><i class="fas fa-check"></i> Supplier marketplace</li>
+                        <li><i class="fas fa-check"></i> Custom alerts</li>
+                        <li><i class="fas fa-check"></i> Integrations</li>
+                    </ul>
+                    <button class="btn-primary btn-full" onclick="showAuthModal('signup')">Start Pro Trial</button>
+                </div>
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <h3>Enterprise</h3>
+                        <div class="price">$49.99<span>/month</span></div>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i> Team accounts</li>
+                        <li><i class="fas fa-check"></i> White-label branding</li>
+                        <li><i class="fas fa-check"></i> API access</li>
+                        <li><i class="fas fa-check"></i> Custom AI fine-tuning</li>
+                        <li><i class="fas fa-check"></i> Analytics exports</li>
+                        <li><i class="fas fa-check"></i> Priority support</li>
+                    </ul>
+                    <button class="btn-secondary btn-full" onclick="showAuthModal('signup')">Contact Sales</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>Empowering Entrepreneurs Worldwide</h2>
+                    <p>BizPilot was born from the vision of democratizing entrepreneurship through AI. We believe every great idea deserves a chance to succeed, regardless of your background or resources.</p>
+                    <p>Our platform is designed specifically for emerging markets like Dhaka, where entrepreneurs need quick, reliable validation and strategic guidance to compete in rapidly evolving markets.</p>
+                    <div class="about-stats">
+                        <div class="about-stat">
+                            <span class="stat-number">50+</span>
+                            <span class="stat-label">Countries Served</span>
+                        </div>
+                        <div class="about-stat">
+                            <span class="stat-number">1M+</span>
+                            <span class="stat-label">Ideas Processed</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-image">
+                    <div class="image-placeholder">
+                        <i class="fas fa-globe"></i>
+                        <p>Global Entrepreneurship Network</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-rocket"></i>
+                        <span>BizPilot</span>
+                    </div>
+                    <p>Transforming ideas into successful businesses with AI-powered insights.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Product</h4>
+                    <ul>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#pricing">Pricing</a></li>
+                        <li><a href="#">API</a></li>
+                        <li><a href="#">Integrations</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Security</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 BizPilot. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Authentication Modal -->
+    <div class="modal" id="authModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="authTitle">Welcome to BizPilot</h2>
+                <button class="modal-close" onclick="closeAuthModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- Login Form -->
+                <div class="auth-form" id="loginForm">
+                    <div class="auth-options">
+                        <button class="auth-btn google" onclick="authWithGoogle()">
+                            <i class="fab fa-google"></i>
+                            Continue with Google
+                        </button>
+                        <button class="auth-btn linkedin" onclick="authWithLinkedIn()">
+                            <i class="fab fa-linkedin"></i>
+                            Continue with LinkedIn
+                        </button>
+                        <button class="auth-btn voice" onclick="authWithVoice()">
+                            <i class="fas fa-microphone"></i>
+                            Voice Authentication
+                        </button>
+                    </div>
+                    <div class="auth-divider">
+                        <span>or</span>
+                    </div>
+                    <form class="auth-email-form" onsubmit="handleLogin(event)">
+                        <div class="form-group">
+                            <input type="email" placeholder="Email address" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" placeholder="Password" required>
+                        </div>
+                        <button type="submit" class="btn-primary btn-full">Sign In</button>
+                    </form>
+                    <div class="auth-footer">
+                        <p>Don't have an account? <a href="#" onclick="switchAuthMode('signup')">Sign up</a></p>
+                    </div>
+                </div>
+
+                <!-- Signup Form -->
+                <div class="auth-form" id="signupForm" style="display: none;">
+                    <div class="auth-options">
+                        <button class="auth-btn google" onclick="authWithGoogle()">
+                            <i class="fab fa-google"></i>
+                            Continue with Google
+                        </button>
+                        <button class="auth-btn linkedin" onclick="authWithLinkedIn()">
+                            <i class="fab fa-linkedin"></i>
+                            Continue with LinkedIn
+                        </button>
+                        <button class="auth-btn voice" onclick="authWithVoice()">
+                            <i class="fas fa-microphone"></i>
+                            Voice Registration
+                        </button>
+                    </div>
+                    <div class="auth-divider">
+                        <span>or</span>
+                    </div>
+                    <form class="auth-email-form" onsubmit="handleSignup(event)">
+                        <div class="form-group">
+                            <input type="text" placeholder="Full name" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" placeholder="Email address" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" placeholder="Password" required>
+                        </div>
+                        <div class="form-group">
+                            <select required>
+                                <option value="">Select Business Stage</option>
+                                <option value="idea">Just an Idea</option>
+                                <option value="planning">Planning Phase</option>
+                                <option value="startup">Early Startup</option>
+                                <option value="growing">Growing Business</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <select required>
+                                <option value="">Select Language</option>
+                                <option value="en">English</option>
+                                <option value="bn">বাংলা</option>
+                                <option value="hi">हिंदी</option>
+                                <option value="es">Español</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn-primary btn-full">Create Account</button>
+                    </form>
+                    <div class="auth-footer">
+                        <p>Already have an account? <a href="#" onclick="switchAuthMode('login')">Sign in</a></p>
+                    </div>
+                </div>
+
+                <!-- Voice Auth Interface -->
+                <div class="auth-form" id="voiceAuthForm" style="display: none;">
+                    <div class="voice-auth">
+                        <div class="voice-auth-header">
+                            <h3>Voice Authentication</h3>
+                            <p>Speak clearly and follow the prompts</p>
+                        </div>
+                        <div class="voice-auth-status" id="voiceAuthStatus">
+                            <i class="fas fa-microphone-slash"></i>
+                            <p>Click the microphone to start</p>
+                        </div>
+                        <button class="voice-auth-btn" id="voiceAuthBtn" onclick="startVoiceAuth()">
+                            <i class="fas fa-microphone"></i>
+                        </button>
+                        <div class="voice-auth-steps">
+                            <div class="step active">
+                                <span class="step-number">1</span>
+                                <span class="step-text">Say your full name</span>
+                            </div>
+                            <div class="step">
+                                <span class="step-number">2</span>
+                                <span class="step-text">Speak your email address</span>
+                            </div>
+                            <div class="step">
+                                <span class="step-number">3</span>
+                                <span class="step-text">Confirm your identity</span>
+                            </div>
+                        </div>
+                        <button class="btn-secondary" onclick="switchAuthMode('signup')">Back to Form</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner">
+            <i class="fas fa-rocket"></i>
+            <p>Generating your business model...</p>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
