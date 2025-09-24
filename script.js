@@ -40,6 +40,21 @@ class BizPilot {
             this.resetForm();
         });
 
+        // Quick Guide modal events
+        document.getElementById('quickGuideModal').addEventListener('hidden.bs.modal', () => {
+            this.resetQuickGuide();
+        });
+
+        // Quick Guide button
+        document.getElementById('generateQuickGuide').addEventListener('click', () => {
+            this.generateQuickGuide();
+        });
+
+        // Save Quick Guide button
+        document.getElementById('saveQuickGuide').addEventListener('click', () => {
+            this.saveQuickGuide();
+        });
+
         // Keyboard shortcuts
         document.addEventListener('keydown', (e) => {
             this.handleKeyboardShortcuts(e);
@@ -1165,6 +1180,172 @@ class BizPilot {
         
         // Clear draft
         localStorage.removeItem('bizpilot_draft');
+    }
+
+    // Quick Guide Methods
+    resetQuickGuide() {
+        document.getElementById('quickBusinessIdea').value = '';
+        document.getElementById('quickBudget').selectedIndex = 1; // Default to $1,000 - $5,000
+        document.getElementById('quickCategory').selectedIndex = 0; // Default to Technology
+        
+        // Hide results and loading
+        document.getElementById('quickGuideLoading').classList.add('d-none');
+        document.getElementById('quickGuideResults').classList.add('d-none');
+        document.getElementById('saveQuickGuide').classList.add('d-none');
+        
+        // Show generate button
+        document.getElementById('generateQuickGuide').classList.remove('d-none');
+    }
+
+    async generateQuickGuide() {
+        const businessIdea = document.getElementById('quickBusinessIdea').value.trim();
+        const budget = document.getElementById('quickBudget').value;
+        const category = document.getElementById('quickCategory').value;
+
+        if (!businessIdea) {
+            this.showAlert('Please enter your business idea', 'warning');
+            return;
+        }
+
+        // Show loading
+        document.getElementById('quickGuideLoading').classList.remove('d-none');
+        document.getElementById('generateQuickGuide').classList.add('d-none');
+        document.getElementById('quickGuideResults').classList.add('d-none');
+
+        try {
+            // Simulate API call - in real implementation, this would call your backend
+            const quickGuide = await this.generateQuickBusinessGuide({
+                idea: businessIdea,
+                budget: parseInt(budget),
+                category: category
+            });
+
+            // Hide loading and show results
+            document.getElementById('quickGuideLoading').classList.add('d-none');
+            document.getElementById('quickGuideResults').classList.remove('d-none');
+            document.getElementById('saveQuickGuide').classList.remove('d-none');
+
+            // Populate results
+            document.getElementById('quickGuideContent').innerHTML = quickGuide;
+
+        } catch (error) {
+            console.error('Quick Guide generation error:', error);
+            document.getElementById('quickGuideLoading').classList.add('d-none');
+            document.getElementById('generateQuickGuide').classList.remove('d-none');
+            this.showAlert('Failed to generate quick guide. Please try again.', 'danger');
+        }
+    }
+
+    async generateQuickBusinessGuide(data) {
+        // This would typically call your AI service
+        // For now, we'll generate a mock quick guide
+        
+        const budgetText = this.formatBudget(data.budget);
+        const categoryText = data.category.charAt(0).toUpperCase() + data.category.slice(1);
+        
+        return `
+            <div class="quick-guide-content">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <h6><i class="fas fa-bullseye me-2 text-primary"></i>Business Overview</h6>
+                        <p class="small">${data.idea}</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <h6><i class="fas fa-tags me-2 text-info"></i>Category</h6>
+                        <p class="small">${categoryText}</p>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <h6><i class="fas fa-dollar-sign me-2 text-success"></i>Budget Range</h6>
+                        <p class="small">${budgetText}</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <h6><i class="fas fa-clock me-2 text-warning"></i>Timeline</h6>
+                        <p class="small">2-4 weeks to start</p>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <h6><i class="fas fa-list-check me-2 text-primary"></i>Quick Action Steps</h6>
+                    <ol class="small mb-0">
+                        <li>Market research and competitor analysis</li>
+                        <li>Create a minimum viable product (MVP)</li>
+                        <li>Set up basic business structure</li>
+                        <li>Test with initial customers</li>
+                        <li>Refine and scale based on feedback</li>
+                    </ol>
+                </div>
+                
+                <div class="alert alert-info small mb-0">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Next Step:</strong> Consider creating a full business plan for detailed planning and strategy.
+                </div>
+            </div>
+        `;
+    }
+
+    saveQuickGuide() {
+        const quickGuideData = {
+            idea: document.getElementById('quickBusinessIdea').value,
+            budget: document.getElementById('quickBudget').value,
+            category: document.getElementById('quickCategory').value,
+            content: document.getElementById('quickGuideContent').innerHTML,
+            timestamp: new Date().toISOString(),
+            type: 'quick-guide'
+        };
+
+        // Save to localStorage (in a real app, this would save to backend)
+        let savedGuides = JSON.parse(localStorage.getItem('bizpilot_quick_guides') || '[]');
+        savedGuides.unshift(quickGuideData);
+        
+        // Keep only the latest 10 guides
+        if (savedGuides.length > 10) {
+            savedGuides = savedGuides.slice(0, 10);
+        }
+        
+        localStorage.setItem('bizpilot_quick_guides', JSON.stringify(savedGuides));
+
+        this.showAlert('Quick guide saved successfully!', 'success');
+        
+        // Close modal after a short delay
+        setTimeout(() => {
+            bootstrap.Modal.getInstance(document.getElementById('quickGuideModal')).hide();
+        }, 1500);
+    }
+
+    formatBudget(budget) {
+        if (budget < 1000) return 'Under $1,000';
+        if (budget <= 5000) return '$1,000 - $5,000';
+        if (budget <= 10000) return '$5,000 - $10,000';
+        if (budget <= 50000) return '$10,000 - $50,000';
+        return '$50,000+';
+    }
+
+    showAlert(message, type = 'info') {
+        // Create and show a toast notification
+        const toastContainer = document.querySelector('.toast-container');
+        const toastId = 'toast-' + Date.now();
+        
+        const toastHTML = `
+            <div id="${toastId}" class="toast align-items-center text-white bg-${type} border-0" role="alert">
+                <div class="d-flex">
+                    <div class="toast-body">${message}</div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                </div>
+            </div>
+        `;
+        
+        toastContainer.insertAdjacentHTML('beforeend', toastHTML);
+        const toastElement = document.getElementById(toastId);
+        const toast = new bootstrap.Toast(toastElement);
+        toast.show();
+        
+        // Remove toast element after it's hidden
+        toastElement.addEventListener('hidden.bs.toast', () => {
+            toastElement.remove();
+        });
     }
 }
 

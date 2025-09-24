@@ -173,6 +173,76 @@ body {
     transform: translateY(-1px);
 }
 
+.btn-quick-guide {
+    background: linear-gradient(45deg, var(--info-color), #0891b2);
+    border: none;
+    padding: 18px 45px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    border-radius: 50px;
+    color: white;
+    box-shadow: 0 8px 25px rgba(8, 145, 178, 0.4);
+    transition: var(--transition);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-quick-guide::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.btn-quick-guide:hover::before {
+    left: 100%;
+}
+
+.btn-quick-guide:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(8, 145, 178, 0.6);
+    color: white;
+}
+
+.btn-quick-guide:active {
+    transform: translateY(-1px);
+}
+
+/* Quick Guide Styles */
+.quick-guide-content h6 {
+    color: var(--dark-color);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.quick-guide-content .small {
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+.quick-guide-content ol {
+    padding-left: 1.2rem;
+}
+
+.quick-guide-content ol li {
+    margin-bottom: 0.3rem;
+}
+
+#quickGuideLoading {
+    color: var(--text-muted);
+}
+
+#quickGuideLoading .spinner-border {
+    width: 2rem;
+    height: 2rem;
+}
+
 /* Modal Styles */
 .modal-content {
     border-radius: 25px;
@@ -841,9 +911,20 @@ body {
         font-size: 2rem;
     }
     
-    .btn-create-idea {
+    .btn-create-idea,
+    .btn-quick-guide {
         padding: 15px 35px;
         font-size: 1rem;
+    }
+    
+    .hero-content .d-flex {
+        flex-direction: column;
+        gap: 1rem !important;
+    }
+    
+    .hero-content .d-flex .btn {
+        width: 100%;
+        max-width: 280px;
     }
     
     .modal-dialog {
