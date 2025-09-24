@@ -10,6 +10,10 @@ class BizPilot {
         this.savedPlans = [];
         this.historyPlans = [];
         
+        // Authentication state
+        this.currentUser = null;
+        this.isAuthenticated = false;
+        
         this.init();
     }
 
@@ -17,6 +21,7 @@ class BizPilot {
         this.setupEventListeners();
         this.setupFileUpload();
         this.setupFormValidation();
+        this.checkAuthenticationState();
         this.loadUserData();
         this.setupKeyboardNavigation();
         this.setupProgressTracking();
@@ -53,6 +58,24 @@ class BizPilot {
         // Save Quick Guide button
         document.getElementById('saveQuickGuide').addEventListener('click', () => {
             this.saveQuickGuide();
+        });
+
+        // Authentication event listeners
+        document.getElementById('loginBtn').addEventListener('click', () => {
+            this.handleLogin();
+        });
+
+        document.getElementById('registerBtn').addEventListener('click', () => {
+            this.handleRegister();
+        });
+
+        // Enter key submit for forms
+        document.getElementById('loginForm').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') this.handleLogin();
+        });
+
+        document.getElementById('registerForm').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') this.handleRegister();
         });
 
         // Keyboard shortcuts
@@ -1347,6 +1370,480 @@ class BizPilot {
             toastElement.remove();
         });
     }
+
+    // Authentication Methods
+    checkAuthenticationState() {
+        const token = localStorage.getItem('bizpilot_token');
+        const user = localStorage.getItem('bizpilot_user');
+        
+        if (token && user) {
+            this.currentUser = JSON.parse(user);
+            this.isAuthenticated = true;
+            this.updateNavigationState();
+            this.loadDashboardData();
+        } else {
+            this.isAuthenticated = false;
+            this.updateNavigationState();
+        }
+    }
+
+    updateNavigationState() {
+        const authenticatedNav = document.getElementById('authenticatedNav');
+        const guestNav = document.getElementById('guestNav');
+        const userDisplayName = document.getElementById('userDisplayName');
+
+        if (this.isAuthenticated && this.currentUser) {
+            authenticatedNav.style.display = 'flex';
+            guestNav.style.display = 'none';
+            userDisplayName.textContent = this.currentUser.name || 'User';
+        } else {
+            authenticatedNav.style.display = 'none';
+            guestNav.style.display = 'flex';
+        }
+    }
+
+    async handleLogin() {
+        const email = document.getElementById('loginEmail').value.trim();
+        const password = document.getElementById('loginPassword').value;
+        const rememberMe = document.getElementById('rememberMe').checked;
+        const loginError = document.getElementById('loginError');
+        const loginBtn = document.getElementById('loginBtn');
+
+        // Clear previous errors
+        loginError.classList.add('d-none');
+
+        // Validation
+        if (!email || !password) {
+            loginError.textContent = 'Please fill in all fields';
+            loginError.classList.remove('d-none');
+            return;
+        }
+
+        // Show loading state
+        loginBtn.classList.add('btn-loading');
+        loginBtn.disabled = true;
+
+        try {
+            // Simulate API call - in real app, this would call your backend
+            const response = await this.authenticateUser(email, password);
+            
+            if (response.success) {
+                // Store authentication data
+                localStorage.setItem('bizpilot_token', response.token);
+                localStorage.setItem('bizpilot_user', JSON.stringify(response.user));
+                
+                if (rememberMe) {
+                    localStorage.setItem('bizpilot_remember', 'true');
+                }
+
+                this.currentUser = response.user;
+                this.isAuthenticated = true;
+                this.updateNavigationState();
+                this.loadDashboardData();
+
+                // Close modal and show success
+                bootstrap.Modal.getInstance(document.getElementById('loginModal')).hide();
+                this.showAlert('Welcome back! Login successful.', 'success');
+                
+                // Reset form
+                document.getElementById('loginForm').reset();
+            } else {
+                loginError.textContent = response.message || 'Login failed';
+                loginError.classList.remove('d-none');
+            }
+        } catch (error) {
+            console.error('Login error:', error);
+            loginError.textContent = 'An error occurred. Please try again.';
+            loginError.classList.remove('d-none');
+        } finally {
+            loginBtn.classList.remove('btn-loading');
+            loginBtn.disabled = false;
+        }
+    }
+
+    async handleRegister() {
+        const name = document.getElementById('registerName').value.trim();
+        const email = document.getElementById('registerEmail').value.trim();
+        const password = document.getElementById('registerPassword').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        const agreeTerms = document.getElementById('agreeTerms').checked;
+        const registerError = document.getElementById('registerError');
+        const registerBtn = document.getElementById('registerBtn');
+
+        // Clear previous errors
+        registerError.classList.add('d-none');
+
+        // Validation
+        if (!name || !email || !password || !confirmPassword) {
+            registerError.textContent = 'Please fill in all fields';
+            registerError.classList.remove('d-none');
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            registerError.textContent = 'Passwords do not match';
+            registerError.classList.remove('d-none');
+            return;
+        }
+
+        if (password.length < 6) {
+            registerError.textContent = 'Password must be at least 6 characters long';
+            registerError.classList.remove('d-none');
+            return;
+        }
+
+        if (!agreeTerms) {
+            registerError.textContent = 'Please agree to the terms and conditions';
+            registerError.classList.remove('d-none');
+            return;
+        }
+
+        // Show loading state
+        registerBtn.classList.add('btn-loading');
+        registerBtn.disabled = true;
+
+        try {
+            // Simulate API call - in real app, this would call your backend
+            const response = await this.registerUser(name, email, password);
+            
+            if (response.success) {
+                // Store authentication data
+                localStorage.setItem('bizpilot_token', response.token);
+                localStorage.setItem('bizpilot_user', JSON.stringify(response.user));
+
+                this.currentUser = response.user;
+                this.isAuthenticated = true;
+                this.updateNavigationState();
+                this.loadDashboardData();
+
+                // Close modal and show success
+                bootstrap.Modal.getInstance(document.getElementById('registerModal')).hide();
+                this.showAlert('Account created successfully! Welcome to BizPilot.', 'success');
+                
+                // Reset form
+                document.getElementById('registerForm').reset();
+            } else {
+                registerError.textContent = response.message || 'Registration failed';
+                registerError.classList.remove('d-none');
+            }
+        } catch (error) {
+            console.error('Registration error:', error);
+            registerError.textContent = 'An error occurred. Please try again.';
+            registerError.classList.remove('d-none');
+        } finally {
+            registerBtn.classList.remove('btn-loading');
+            registerBtn.disabled = false;
+        }
+    }
+
+    async authenticateUser(email, password) {
+        // Simulate API call with delay
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        
+        // Mock authentication - in real app, this would be an API call
+        if (email === 'demo@bizpilot.com' && password === 'demo123') {
+            return {
+                success: true,
+                token: 'mock-jwt-token-' + Date.now(),
+                user: {
+                    id: 1,
+                    name: 'Demo User',
+                    email: email,
+                    joinDate: '2024-01-01',
+                    totalIdeas: 5,
+                    totalPlans: 12,
+                    quickGuides: 3
+                }
+            };
+        } else {
+            return {
+                success: false,
+                message: 'Invalid email or password'
+            };
+        }
+    }
+
+    async registerUser(name, email, password) {
+        // Simulate API call with delay
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        
+        // Mock registration - in real app, this would be an API call
+        // Check if user already exists (mock check)
+        const existingUsers = JSON.parse(localStorage.getItem('bizpilot_registered_users') || '[]');
+        if (existingUsers.find(u => u.email === email)) {
+            return {
+                success: false,
+                message: 'Email already registered'
+            };
+        }
+
+        // Create new user
+        const newUser = {
+            id: Date.now(),
+            name: name,
+            email: email,
+            joinDate: new Date().toISOString().split('T')[0],
+            totalIdeas: 0,
+            totalPlans: 0,
+            quickGuides: 0
+        };
+
+        // Save user to mock database
+        existingUsers.push(newUser);
+        localStorage.setItem('bizpilot_registered_users', JSON.stringify(existingUsers));
+
+        return {
+            success: true,
+            token: 'mock-jwt-token-' + Date.now(),
+            user: newUser
+        };
+    }
+
+    logout() {
+        // Clear authentication data
+        localStorage.removeItem('bizpilot_token');
+        localStorage.removeItem('bizpilot_user');
+        localStorage.removeItem('bizpilot_remember');
+
+        this.currentUser = null;
+        this.isAuthenticated = false;
+        this.updateNavigationState();
+
+        // Hide dashboard if visible
+        this.hideDashboard();
+        this.hideProfile();
+
+        this.showAlert('You have been logged out successfully.', 'info');
+    }
+
+    // Dashboard Methods
+    loadDashboardData() {
+        if (!this.isAuthenticated) return;
+
+        // Load user statistics
+        const savedPlans = JSON.parse(localStorage.getItem('bizpilot_saved_plans') || '[]');
+        const quickGuides = JSON.parse(localStorage.getItem('bizpilot_quick_guides') || '[]');
+        const businessIdeas = JSON.parse(localStorage.getItem('bizpilot_business_ideas') || '[]');
+
+        // Update dashboard stats
+        document.getElementById('totalIdeas').textContent = businessIdeas.length;
+        document.getElementById('totalPlans').textContent = savedPlans.length;
+        document.getElementById('quickGuides').textContent = quickGuides.length;
+        document.getElementById('savedItems').textContent = savedPlans.length + quickGuides.length;
+
+        // Update profile stats
+        document.getElementById('profileTotalIdeas').textContent = businessIdeas.length;
+        document.getElementById('profileTotalPlans').textContent = savedPlans.length;
+        document.getElementById('profileQuickGuides').textContent = quickGuides.length;
+        document.getElementById('profileJoinDate').textContent = this.formatDate(this.currentUser.joinDate);
+
+        // Load recent activities
+        this.loadRecentActivities();
+    }
+
+    loadRecentActivities() {
+        const activities = this.getRecentActivities();
+        const container = document.getElementById('recentActivities');
+
+        if (activities.length === 0) {
+            container.innerHTML = '<p class="text-muted">No recent activities</p>';
+            return;
+        }
+
+        const activitiesHTML = activities.map(activity => `
+            <div class="activity-item">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <i class="${activity.icon} me-2 text-${activity.color}"></i>
+                        <strong>${activity.title}</strong>
+                        <p class="mb-1 small">${activity.description}</p>
+                    </div>
+                    <span class="activity-time">${activity.time}</span>
+                </div>
+            </div>
+        `).join('');
+
+        container.innerHTML = activitiesHTML;
+    }
+
+    getRecentActivities() {
+        // Mock recent activities - in real app, this would come from API
+        return [
+            {
+                icon: 'fas fa-lightbulb',
+                color: 'warning',
+                title: 'Business Idea Created',
+                description: 'Created "Food Delivery App" business idea',
+                time: '2 hours ago'
+            },
+            {
+                icon: 'fas fa-bolt',
+                color: 'info',
+                title: 'Quick Guide Generated',
+                description: 'Generated quick guide for e-commerce business',
+                time: '1 day ago'
+            },
+            {
+                icon: 'fas fa-save',
+                color: 'success',
+                title: 'Plan Saved',
+                description: 'Saved "Tech Startup" business plan',
+                time: '3 days ago'
+            }
+        ];
+    }
+
+    showDashboard() {
+        if (!this.isAuthenticated) {
+            this.showAlert('Please login to access the dashboard.', 'warning');
+            bootstrap.Modal.getInstance(document.getElementById('loginModal')).show();
+            return;
+        }
+
+        // Hide other sections
+        document.querySelector('.hero-section').style.display = 'none';
+        document.getElementById('userProfile').classList.add('d-none');
+        
+        // Show dashboard
+        document.getElementById('userDashboard').classList.remove('d-none');
+        
+        // Refresh data
+        this.loadDashboardData();
+    }
+
+    hideDashboard() {
+        document.getElementById('userDashboard').classList.add('d-none');
+        document.querySelector('.hero-section').style.display = 'block';
+    }
+
+    showProfile() {
+        if (!this.isAuthenticated) {
+            this.showAlert('Please login to access your profile.', 'warning');
+            return;
+        }
+
+        // Hide other sections
+        document.querySelector('.hero-section').style.display = 'none';
+        document.getElementById('userDashboard').classList.add('d-none');
+        
+        // Show profile
+        document.getElementById('userProfile').classList.remove('d-none');
+        
+        // Load profile data
+        this.loadProfileData();
+    }
+
+    hideProfile() {
+        document.getElementById('userProfile').classList.add('d-none');
+        document.querySelector('.hero-section').style.display = 'block';
+    }
+
+    loadProfileData() {
+        if (!this.currentUser) return;
+
+        document.getElementById('profileName').value = this.currentUser.name || '';
+        document.getElementById('profileEmail').value = this.currentUser.email || '';
+        document.getElementById('profilePhone').value = this.currentUser.phone || '';
+        document.getElementById('profileBio').value = this.currentUser.bio || '';
+    }
+
+    updateProfile() {
+        const name = document.getElementById('profileName').value.trim();
+        const phone = document.getElementById('profilePhone').value.trim();
+        const bio = document.getElementById('profileBio').value.trim();
+
+        if (!name) {
+            this.showAlert('Name is required.', 'warning');
+            return;
+        }
+
+        // Update user data
+        this.currentUser.name = name;
+        this.currentUser.phone = phone;
+        this.currentUser.bio = bio;
+
+        // Save to localStorage
+        localStorage.setItem('bizpilot_user', JSON.stringify(this.currentUser));
+
+        // Update navigation
+        this.updateNavigationState();
+
+        this.showAlert('Profile updated successfully!', 'success');
+    }
+
+    changePassword() {
+        const currentPassword = document.getElementById('currentPassword').value;
+        const newPassword = document.getElementById('newPassword').value;
+        const confirmNewPassword = document.getElementById('confirmNewPassword').value;
+
+        if (!currentPassword || !newPassword || !confirmNewPassword) {
+            this.showAlert('Please fill in all password fields.', 'warning');
+            return;
+        }
+
+        if (newPassword !== confirmNewPassword) {
+            this.showAlert('New passwords do not match.', 'warning');
+            return;
+        }
+
+        if (newPassword.length < 6) {
+            this.showAlert('Password must be at least 6 characters long.', 'warning');
+            return;
+        }
+
+        // In real app, this would verify current password and update
+        this.showAlert('Password changed successfully!', 'success');
+        
+        // Clear form
+        document.getElementById('changePasswordForm').reset();
+    }
+
+    showHistory() {
+        if (!this.isAuthenticated) {
+            this.showAlert('Please login to view your history.', 'warning');
+            return;
+        }
+        
+        // For now, show a simple alert - in full implementation, this would show a history page
+        this.showAlert('History feature coming soon!', 'info');
+    }
+
+    showSettings() {
+        if (!this.isAuthenticated) {
+            this.showAlert('Please login to access settings.', 'warning');
+            return;
+        }
+        
+        // For now, show a simple alert - in full implementation, this would show settings page
+        this.showAlert('Settings feature coming soon!', 'info');
+    }
+
+    formatDate(dateString) {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', { 
+            year: 'numeric', 
+            month: 'short' 
+        });
+    }
+
+    // Helper methods for dashboard actions
+    createNewIdea() {
+        bootstrap.Modal.getInstance(document.getElementById('ideaModal')).show();
+    }
+
+    createQuickGuide() {
+        bootstrap.Modal.getInstance(document.getElementById('quickGuideModal')).show();
+    }
+
+    backToHome() {
+        this.hideDashboard();
+        this.hideProfile();
+    }
+
+    backToDashboard() {
+        this.hideProfile();
+        this.showDashboard();
+    }
 }
 
 // Global functions for onclick handlers
@@ -1385,6 +1882,73 @@ window.editTemplate = function() {
 window.generatePlans = function() {
     if (window.bizPilot) {
         window.bizPilot.generatePlans();
+    }
+};
+
+// Authentication and Dashboard global functions
+window.showDashboard = function() {
+    if (window.bizPilot) {
+        window.bizPilot.showDashboard();
+    }
+};
+
+window.showHistory = function() {
+    if (window.bizPilot) {
+        window.bizPilot.showHistory();
+    }
+};
+
+window.showProfile = function() {
+    if (window.bizPilot) {
+        window.bizPilot.showProfile();
+    }
+};
+
+window.showSettings = function() {
+    if (window.bizPilot) {
+        window.bizPilot.showSettings();
+    }
+};
+
+window.logout = function() {
+    if (window.bizPilot) {
+        window.bizPilot.logout();
+    }
+};
+
+window.updateProfile = function() {
+    if (window.bizPilot) {
+        window.bizPilot.updateProfile();
+    }
+};
+
+window.changePassword = function() {
+    if (window.bizPilot) {
+        window.bizPilot.changePassword();
+    }
+};
+
+window.createNewIdea = function() {
+    if (window.bizPilot) {
+        window.bizPilot.createNewIdea();
+    }
+};
+
+window.createQuickGuide = function() {
+    if (window.bizPilot) {
+        window.bizPilot.createQuickGuide();
+    }
+};
+
+window.backToHome = function() {
+    if (window.bizPilot) {
+        window.bizPilot.backToHome();
+    }
+};
+
+window.backToDashboard = function() {
+    if (window.bizPilot) {
+        window.bizPilot.backToDashboard();
     }
 };
 

@@ -59,21 +59,74 @@
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ms-auto">
+          <!-- Authenticated User Navigation -->
+          <ul
+            class="navbar-nav ms-auto"
+            id="authenticatedNav"
+            style="display: none"
+          >
             <li class="nav-item">
-              <a class="nav-link" href="#dashboard">
+              <a class="nav-link" href="#" onclick="showDashboard()">
                 <i class="fas fa-tachometer-alt me-1"></i>Dashboard
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#history">
+              <a class="nav-link" href="#" onclick="showHistory()">
                 <i class="fas fa-history me-1"></i>History
               </a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#profile">
-                <i class="fas fa-user me-1"></i>Profile
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="userDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <i class="fas fa-user me-1"></i
+                ><span id="userDisplayName">User</span>
               </a>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li>
+                  <a class="dropdown-item" href="#" onclick="showProfile()">
+                    <i class="fas fa-user-edit me-2"></i>Profile
+                  </a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#" onclick="showSettings()">
+                    <i class="fas fa-cog me-2"></i>Settings
+                  </a>
+                </li>
+                <li><hr class="dropdown-divider" /></li>
+                <li>
+                  <a class="dropdown-item" href="#" onclick="logout()">
+                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                  </a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+
+          <!-- Guest User Navigation -->
+          <ul class="navbar-nav ms-auto" id="guestNav">
+            <li class="nav-item">
+              <button
+                class="btn btn-outline-light me-2"
+                data-bs-toggle="modal"
+                data-bs-target="#loginModal"
+              >
+                <i class="fas fa-sign-in-alt me-1"></i>Login
+              </button>
+            </li>
+            <li class="nav-item">
+              <button
+                class="btn btn-light"
+                data-bs-toggle="modal"
+                data-bs-target="#registerModal"
+              >
+                <i class="fas fa-user-plus me-1"></i>Sign Up
+              </button>
             </li>
           </ul>
         </div>
@@ -529,6 +582,450 @@
             >
               <i class="fas fa-save me-2"></i>Save Guide
             </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div
+      class="modal fade"
+      id="loginModal"
+      tabindex="-1"
+      aria-labelledby="loginModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="loginModalLabel">
+              <i class="fas fa-sign-in-alt me-2"></i>Login to BizPilot
+            </h5>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form id="loginForm">
+              <div class="mb-3">
+                <label for="loginEmail" class="form-label">
+                  <i class="fas fa-envelope me-2"></i>Email Address *
+                </label>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="loginEmail"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="loginPassword" class="form-label">
+                  <i class="fas fa-lock me-2"></i>Password *
+                </label>
+                <input
+                  type="password"
+                  class="form-control"
+                  id="loginPassword"
+                  required
+                />
+              </div>
+              <div class="mb-3 form-check">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  id="rememberMe"
+                />
+                <label class="form-check-label" for="rememberMe"
+                  >Remember me</label
+                >
+              </div>
+              <div id="loginError" class="alert alert-danger d-none"></div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <button type="button" class="btn btn-primary" id="loginBtn">
+              <i class="fas fa-sign-in-alt me-2"></i>Login
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div
+      class="modal fade"
+      id="registerModal"
+      tabindex="-1"
+      aria-labelledby="registerModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="registerModalLabel">
+              <i class="fas fa-user-plus me-2"></i>Create Account
+            </h5>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form id="registerForm">
+              <div class="mb-3">
+                <label for="registerName" class="form-label">
+                  <i class="fas fa-user me-2"></i>Full Name *
+                </label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="registerName"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="registerEmail" class="form-label">
+                  <i class="fas fa-envelope me-2"></i>Email Address *
+                </label>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="registerEmail"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="registerPassword" class="form-label">
+                  <i class="fas fa-lock me-2"></i>Password *
+                </label>
+                <input
+                  type="password"
+                  class="form-control"
+                  id="registerPassword"
+                  required
+                  minlength="6"
+                />
+                <div class="form-text">
+                  Password must be at least 6 characters long
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="confirmPassword" class="form-label">
+                  <i class="fas fa-lock me-2"></i>Confirm Password *
+                </label>
+                <input
+                  type="password"
+                  class="form-control"
+                  id="confirmPassword"
+                  required
+                />
+              </div>
+              <div class="mb-3 form-check">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  id="agreeTerms"
+                  required
+                />
+                <label class="form-check-label" for="agreeTerms">
+                  I agree to the
+                  <a href="#" class="text-decoration-none">Terms of Service</a>
+                  and
+                  <a href="#" class="text-decoration-none">Privacy Policy</a>
+                </label>
+              </div>
+              <div id="registerError" class="alert alert-danger d-none"></div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <button type="button" class="btn btn-primary" id="registerBtn">
+              <i class="fas fa-user-plus me-2"></i>Create Account
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- User Dashboard Section -->
+    <div id="userDashboard" class="dashboard-section d-none">
+      <div class="container py-5">
+        <div class="row">
+          <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <h2><i class="fas fa-tachometer-alt me-2"></i>Dashboard</h2>
+              <button class="btn btn-primary" onclick="backToHome()">
+                <i class="fas fa-home me-2"></i>Back to Home
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dashboard Stats -->
+        <div class="row mb-4">
+          <div class="col-md-3 mb-3">
+            <div class="card bg-primary text-white">
+              <div class="card-body">
+                <div class="d-flex justify-content-between">
+                  <div>
+                    <h4 class="mb-0" id="totalIdeas">0</h4>
+                    <p class="mb-0">Business Ideas</p>
+                  </div>
+                  <i class="fas fa-lightbulb fa-2x opacity-75"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 mb-3">
+            <div class="card bg-success text-white">
+              <div class="card-body">
+                <div class="d-flex justify-content-between">
+                  <div>
+                    <h4 class="mb-0" id="totalPlans">0</h4>
+                    <p class="mb-0">Business Plans</p>
+                  </div>
+                  <i class="fas fa-file-alt fa-2x opacity-75"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 mb-3">
+            <div class="card bg-info text-white">
+              <div class="card-body">
+                <div class="d-flex justify-content-between">
+                  <div>
+                    <h4 class="mb-0" id="quickGuides">0</h4>
+                    <p class="mb-0">Quick Guides</p>
+                  </div>
+                  <i class="fas fa-bolt fa-2x opacity-75"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 mb-3">
+            <div class="card bg-warning text-white">
+              <div class="card-body">
+                <div class="d-flex justify-content-between">
+                  <div>
+                    <h4 class="mb-0" id="savedItems">0</h4>
+                    <p class="mb-0">Saved Items</p>
+                  </div>
+                  <i class="fas fa-bookmark fa-2x opacity-75"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Activities -->
+        <div class="row">
+          <div class="col-md-8 mb-4">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="mb-0">
+                  <i class="fas fa-clock me-2"></i>Recent Activities
+                </h5>
+              </div>
+              <div class="card-body">
+                <div id="recentActivities">
+                  <p class="text-muted">No recent activities</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-4">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="mb-0">
+                  <i class="fas fa-user me-2"></i>Quick Actions
+                </h5>
+              </div>
+              <div class="card-body">
+                <div class="d-grid gap-2">
+                  <button class="btn btn-primary" onclick="createNewIdea()">
+                    <i class="fas fa-lightbulb me-2"></i>New Business Idea
+                  </button>
+                  <button class="btn btn-info" onclick="createQuickGuide()">
+                    <i class="fas fa-bolt me-2"></i>Quick Guide
+                  </button>
+                  <button class="btn btn-success" onclick="showHistory()">
+                    <i class="fas fa-history me-2"></i>View History
+                  </button>
+                  <button class="btn btn-secondary" onclick="showProfile()">
+                    <i class="fas fa-user-edit me-2"></i>Edit Profile
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- User Profile Section -->
+    <div id="userProfile" class="profile-section d-none">
+      <div class="container py-5">
+        <div class="row">
+          <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <h2><i class="fas fa-user-edit me-2"></i>User Profile</h2>
+              <button class="btn btn-secondary" onclick="backToDashboard()">
+                <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="mb-0">
+                  <i class="fas fa-user me-2"></i>Personal Information
+                </h5>
+              </div>
+              <div class="card-body">
+                <form id="profileForm">
+                  <div class="mb-3">
+                    <label for="profileName" class="form-label"
+                      >Full Name</label
+                    >
+                    <input type="text" class="form-control" id="profileName" />
+                  </div>
+                  <div class="mb-3">
+                    <label for="profileEmail" class="form-label"
+                      >Email Address</label
+                    >
+                    <input
+                      type="email"
+                      class="form-control"
+                      id="profileEmail"
+                      readonly
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="profilePhone" class="form-label"
+                      >Phone Number</label
+                    >
+                    <input type="tel" class="form-control" id="profilePhone" />
+                  </div>
+                  <div class="mb-3">
+                    <label for="profileBio" class="form-label">Bio</label>
+                    <textarea
+                      class="form-control"
+                      id="profileBio"
+                      rows="3"
+                    ></textarea>
+                  </div>
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    onclick="updateProfile()"
+                  >
+                    <i class="fas fa-save me-2"></i>Update Profile
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="mb-0">
+                  <i class="fas fa-chart-bar me-2"></i>Account Statistics
+                </h5>
+              </div>
+              <div class="card-body">
+                <div class="row text-center">
+                  <div class="col-6 mb-3">
+                    <h4 class="text-primary" id="profileTotalIdeas">0</h4>
+                    <small class="text-muted">Business Ideas</small>
+                  </div>
+                  <div class="col-6 mb-3">
+                    <h4 class="text-success" id="profileTotalPlans">0</h4>
+                    <small class="text-muted">Business Plans</small>
+                  </div>
+                  <div class="col-6 mb-3">
+                    <h4 class="text-info" id="profileQuickGuides">0</h4>
+                    <small class="text-muted">Quick Guides</small>
+                  </div>
+                  <div class="col-6 mb-3">
+                    <h4 class="text-warning" id="profileJoinDate">-</h4>
+                    <small class="text-muted">Member Since</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card mt-3">
+              <div class="card-header">
+                <h5 class="mb-0">
+                  <i class="fas fa-key me-2"></i>Change Password
+                </h5>
+              </div>
+              <div class="card-body">
+                <form id="changePasswordForm">
+                  <div class="mb-3">
+                    <label for="currentPassword" class="form-label"
+                      >Current Password</label
+                    >
+                    <input
+                      type="password"
+                      class="form-control"
+                      id="currentPassword"
+                      required
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="newPassword" class="form-label"
+                      >New Password</label
+                    >
+                    <input
+                      type="password"
+                      class="form-control"
+                      id="newPassword"
+                      required
+                      minlength="6"
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="confirmNewPassword" class="form-label"
+                      >Confirm New Password</label
+                    >
+                    <input
+                      type="password"
+                      class="form-control"
+                      id="confirmNewPassword"
+                      required
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    class="btn btn-warning"
+                    onclick="changePassword()"
+                  >
+                    <i class="fas fa-key me-2"></i>Change Password
+                  </button>
+                </form>
+              </div>
+            </div>
           </div>
         </div>
       </div>
