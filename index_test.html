@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BizPilot - AI Business Idea Generator</title>
+    <meta
+      name="description"
+      content="AI-powered business planning for small businesses and entrepreneurs. Generate personalized 6-month business plans instantly."
+    />
+    <meta
+      name="keywords"
+      content="business plan, startup, entrepreneur, AI, business idea generator"
+    />
+    <meta name="author" content="BizPilot" />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>"
+    />
+
+    <!-- External Stylesheets -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link href="styles.css?v=1.0.1" rel="stylesheet" />
+    <link rel="manifest" href="manifest.json" />
+
+    <!-- PWA Meta Tags -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="BizPilot" />
+    <meta name="msapplication-TileColor" content="#2563eb" />
+    <meta name="theme-color" content="#2563eb" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+      <div class="container">
+        <a class="navbar-brand fw-bold fs-3" href="#">
+          <i class="fas fa-rocket me-2"></i>BizPilot
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="#dashboard">
+                <i class="fas fa-tachometer-alt me-1"></i>Dashboard
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#history">
+                <i class="fas fa-history me-1"></i>History
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#profile">
+                <i class="fas fa-user me-1"></i>Profile
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="container">
+        <div class="hero-content">
+          <h1 class="hero-title">Transform Your Ideas Into Reality</h1>
+          <p class="hero-subtitle">
+            AI-powered business planning for small businesses and
+            entrepreneurs.<br />
+            Generate personalized 6-month business plans in minutes.
+          </p>
+
+          <button
+            class="btn btn-create-idea"
+            data-bs-toggle="modal"
+            data-bs-target="#ideaModal"
+          >
+            <i class="fas fa-lightbulb me-2"></i>Create New Idea
+          </button>
+
+          <!-- Quick Stats -->
+          <div class="row mt-5">
+            <div class="col-md-4">
+              <div class="stat-item glass-effect rounded-3 p-3 text-center">
+                <i class="fas fa-users fa-2x mb-2"></i>
+                <h4>10,000+</h4>
+                <p class="mb-0">Happy Entrepreneurs</p>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="stat-item glass-effect rounded-3 p-3 text-center">
+                <i class="fas fa-rocket fa-2x mb-2"></i>
+                <h4>25,000+</h4>
+                <p class="mb-0">Business Plans Created</p>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="stat-item glass-effect rounded-3 p-3 text-center">
+                <i class="fas fa-chart-line fa-2x mb-2"></i>
+                <h4>85%</h4>
+                <p class="mb-0">Success Rate</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Business Idea Generation Modal -->
+    <div
+      class="modal fade"
+      id="ideaModal"
+      tabindex="-1"
+      aria-labelledby="ideaModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="ideaModalLabel">
+              <i class="fas fa-brain me-2"></i>Create Your Business Idea
+            </h5>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <!-- Step Indicator -->
+            <div class="step-indicator">
+              <div class="step active" id="step1">1</div>
+              <div class="step-line" id="line1"></div>
+              <div class="step" id="step2">2</div>
+              <div class="step-line" id="line2"></div>
+              <div class="step" id="step3">3</div>
+            </div>
+
+            <!-- Step 1: Input Form -->
+            <div id="inputForm" class="step-content">
+              <form id="businessIdeaForm">
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label for="businessTitle" class="form-label">
+                      <i class="fas fa-tag me-2"></i>Business Title *
+                    </label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="businessTitle"
+                      required
+                      placeholder="Enter your business idea title"
+                      maxlength="100"
+                    />
+                    <div class="form-text">
+                      Choose a catchy and descriptive name
+                    </div>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="businessCategory" class="form-label">
+                      <i class="fas fa-list me-2"></i>Category *
+                    </label>
+                    <select class="form-select" id="businessCategory" required>
+                      <option value="">Select a category</option>
+                      <option value="technology">Technology & Software</option>
+                      <option value="retail">Retail & E-commerce</option>
+                      <option value="food">Food & Beverage</option>
+                      <option value="health">Health & Wellness</option>
+                      <option value="education">Education & Training</option>
+                      <option value="finance">Finance & Consulting</option>
+                      <option value="entertainment">
+                        Entertainment & Media
+                      </option>
+                      <option value="travel">Travel & Tourism</option>
+                      <option value="real-estate">Real Estate</option>
+                      <option value="automotive">Automotive</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <label for="businessDescription" class="form-label">
+                    <i class="fas fa-file-alt me-2"></i>Business Description *
+                  </label>
+                  <textarea
+                    class="form-control"
+                    id="businessDescription"
+                    rows="4"
+                    required
+                    placeholder="Describe your business idea in detail..."
+                    maxlength="1000"
+                  ></textarea>
+                  <div class="form-text">
+                    Provide detailed information -
+                    <span id="charCount">0/1000</span>
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label">
+                    <i class="fas fa-dollar-sign me-2"></i>Budget Range *
+                  </label>
+                  <div class="budget-options">
+                    <div class="budget-option" onclick="selectBudget('low')">
+                      <input
+                        type="radio"
+                        name="budget"
+                        value="low"
+                        id="budgetLow"
+                      />
+                      <div class="budget-icon">
+                        <i class="fas fa-seedling text-success"></i>
+                      </div>
+                      <div class="budget-title">Startup</div>
+                      <div class="budget-range">$0 - $5,000</div>
+                    </div>
+                    <div class="budget-option" onclick="selectBudget('medium')">
+                      <input
+                        type="radio"
+                        name="budget"
+                        value="medium"
+                        id="budgetMedium"
+                      />
+                      <div class="budget-icon">
+                        <i class="fas fa-chart-line text-primary"></i>
+                      </div>
+                      <div class="budget-title">Growth</div>
+                      <div class="budget-range">$5,000 - $25,000</div>
+                    </div>
+                    <div class="budget-option" onclick="selectBudget('high')">
+                      <input
+                        type="radio"
+                        name="budget"
+                        value="high"
+                        id="budgetHigh"
+                      />
+                      <div class="budget-icon">
+                        <i class="fas fa-rocket text-warning"></i>
+                      </div>
+                      <div class="budget-title">Scale</div>
+                      <div class="budget-range">$25,000 - $100,000</div>
+                    </div>
+                    <div
+                      class="budget-option"
+                      onclick="selectBudget('enterprise')"
+                    >
+                      <input
+                        type="radio"
+                        name="budget"
+                        value="enterprise"
+                        id="budgetEnterprise"
+                      />
+                      <div class="budget-icon">
+                        <i class="fas fa-building text-danger"></i>
+                      </div>
+                      <div class="budget-title">Enterprise</div>
+                      <div class="budget-range">$100,000+</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mb-4">
+                  <label class="form-label">
+                    <i class="fas fa-image me-2"></i>Reference Photo (Optional)
+                  </label>
+                  <div
+                    class="file-upload-area"
+                    onclick="document.getElementById('fileInput').click()"
+                  >
+                    <i class="fas fa-cloud-upload-alt file-upload-icon"></i>
+                    <p class="mb-2">Click to upload or drag and drop</p>
+                    <p class="text-muted small">
+                      PNG, JPG, GIF, WebP up to 10MB
+                    </p>
+                    <input
+                      type="file"
+                      id="fileInput"
+                      accept="image/*"
+                      style="display: none"
+                    />
+                  </div>
+                  <div id="filePreview" class="file-preview hidden">
+                    <img
+                      id="previewImage"
+                      src=""
+                      alt="Preview"
+                      class="img-thumbnail"
+                    />
+                    <button
+                      type="button"
+                      class="btn btn-sm btn-danger mt-2"
+                      onclick="removeFile()"
+                    >
+                      <i class="fas fa-trash"></i> Remove
+                    </button>
+                  </div>
+                </div>
+
+                <div class="d-flex justify-content-end">
+                  <button
+                    type="button"
+                    class="btn btn-secondary me-2"
+                    data-bs-dismiss="modal"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    onclick="showTemplate()"
+                  >
+                    Next: Preview <i class="fas fa-arrow-right ms-2"></i>
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <!-- Step 2: Template Preview -->
+            <div id="templatePreview" class="step-content hidden">
+              <div class="template-preview">
+                <h4 class="mb-4">
+                  <i class="fas fa-eye me-2"></i>Preview Your Business Idea
+                </h4>
+                <div id="templateContent">
+                  <!-- Template content will be populated here -->
+                </div>
+                <div class="d-flex justify-content-between mt-4">
+                  <button
+                    type="button"
+                    class="btn btn-outline-primary"
+                    onclick="editTemplate()"
+                  >
+                    <i class="fas fa-edit me-2"></i>Edit
+                  </button>
+                  <div>
+                    <button
+                      type="button"
+                      class="btn btn-secondary me-2"
+                      onclick="showInputForm()"
+                    >
+                      <i class="fas fa-arrow-left me-2"></i>Back
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-success"
+                      onclick="generatePlans()"
+                    >
+                      <i class="fas fa-magic me-2"></i>Generate Plans
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 3: Generated Plans -->
+            <div id="generatedPlans" class="step-content hidden">
+              <div class="loading-spinner" id="loadingSpinner">
+                <div class="spinner-border" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="loading-text mt-3">Analyzing your business idea...</p>
+              </div>
+
+              <div id="plansContainer" class="hidden">
+                <h4 class="mb-4 text-center">
+                  <i class="fas fa-clipboard-list me-2"></i>Your Personalized
+                  6-Month Business Plans
+                </h4>
+                <div class="plans-grid" id="plansContent">
+                  <!-- Plans will be populated here -->
+                </div>
+                <div class="text-center mt-4">
+                  <button
+                    type="button"
+                    class="btn btn-outline-primary"
+                    onclick="showInputForm()"
+                  >
+                    <i class="fas fa-plus me-2"></i>Create Another Idea
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+      <!-- Toast notifications will be dynamically added here -->
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js?v=1.0.1"></script>
+
+    <!-- Service Worker Registration -->
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", function () {
+          navigator.serviceWorker
+            .register("service-worker.js")
+            .then(function (registration) {
+              console.log("ServiceWorker registration successful");
+            })
+            .catch(function (error) {
+              console.log("ServiceWorker registration failed");
+            });
+        });
+      }
+    </script>
+  </body>
+</html>
